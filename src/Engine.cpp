@@ -7,12 +7,12 @@ namespace SSGEClient
 
 Engine::Engine()
 {
-	std::cout << "Client Engine Started!" << std::endl;
+	SSGE::Engine::Engine();
 }
 
 Engine::~Engine()
 {
-	std::cout << "Client Engine Teardown!" << std::endl;
+	SSGE::Engine::~Engine();
 }
 
 Engine* getEngine()

@@ -16,7 +16,8 @@ class SsgeClientConan(ConanFile):
     exports_sources = "src/*"
 
     requires = [
-        ("ssge/0.0.0@demo/testing")
+        ("ssge/0.0.0@demo/testing"),
+        ("ogre/1.12.7@demo/testing")
     ]
 
     def build(self):

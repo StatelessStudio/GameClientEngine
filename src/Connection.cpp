@@ -59,8 +59,6 @@ bool Connection::sendMessage() {
 	}
 	
 	try {
-        engine->step();
-
 		// TODO: lol
 		char buffer[1024];
 		socket.receiveBytes((void*) buffer, sizeof buffer);

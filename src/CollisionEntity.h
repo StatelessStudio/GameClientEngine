@@ -2,6 +2,8 @@
 
 #include <SSGE/CollisionEntity.h>
 
+#include <OgreEntity.h>
+
 namespace SSGEClient
 {
 
@@ -12,7 +14,14 @@ class CollisionEntity :
 	public SSGE::CollisionEntity
 {
 protected:
+	friend class Database;
 	friend class Connection;
+
+public:
+	bool hasMesh = false;
+	Ogre::Entity* ogreEntity;
+	Ogre::SceneNode* ogreNode;
+
 };
 
 } // namespace SSGEClient

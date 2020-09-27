@@ -1,19 +1,23 @@
-#include <SSGEClient/Engine.h>
-#include <SSGEClient/Connection.h>
+#include "example.h"
 
 #include <iostream>
+#include <string>
+#include <Windows.h>
 
 int main()
 {
-    SSGEClient::Engine* engine = SSGEClient::getEngine();
-    SSGEClient::Connection conn("127.0.0.1", 2222);
+    try
+    {
+        system("cp -rf C:/Users/Drew/Dev/GameClientEngine/test_package/bin/* C:/Users/Drew/Dev/GameClientEngine/test_package/build/*/bin/");
+        system("cp -rf C:/Users/Drew/Dev/GameClientEngine/test_package/Media C:/Users/Drew/Dev/GameClientEngine/test_package/build/*/");
 
-    conn.connected();
-    conn.sendMessage();
-
-    int nEntites = engine->entities.size();
-    for (int i = 0; i < nEntites; i++) {
-        std::cout << engine->entities.at(i).serialize() << std::endl;
+    	App app;
+        app.start();
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << "Error occurred during execution: " << e.what() << '\n';
+        return 1;
     }
 
     return 0;

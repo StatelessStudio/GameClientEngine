@@ -1,3 +1,5 @@
 test_package/build
+test_package/bin
+test_package/Media
 
 deps/
