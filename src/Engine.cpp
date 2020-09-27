@@ -15,4 +15,10 @@ Engine::~Engine()
 	std::cout << "Client Engine Teardown!" << std::endl;
 }
 
+Engine* getEngine()
+{
+	static Engine engine;
+	return &engine;
+}
+
 } // namespace SSGEClient
