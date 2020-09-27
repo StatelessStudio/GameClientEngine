@@ -37,7 +37,7 @@ bool Connection::sendMessage() {
 	static Engine* engine = getEngine();
 
 	static unsigned __int64 lastrun;
-	static unsigned __int64 now = engine->getTime();
+	unsigned __int64 now = engine->getTime();
 
 	if (lastrun && (now < lastrun + 30)) {
 		return true;
