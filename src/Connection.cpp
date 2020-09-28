@@ -66,7 +66,6 @@ bool Connection::sendMessage() {
 		std::string payload(buffer);
 		std::cout << payload << std::endl;
 
-		int i = 0;
 		size_t pos = 0;
 		std::string token;
 		while (payload.size()) {
@@ -80,7 +79,10 @@ bool Connection::sendMessage() {
 			}
 
 			CollisionEntity entity;
-			entity.unserialize(token);
+			if (!entity.unserialize(token)) {
+				payload.erase(0, pos + delimSize);
+				continue;
+			}
 
 			std::cout << "ID [" << entity.id << "]" << std::endl;
 
@@ -95,14 +97,14 @@ bool Connection::sendMessage() {
 			}
 
 			payload.erase(0, pos + delimSize);
-
-			i++;
 		}
 	}
 	catch (std::exception& ex) {
 		std::cout << "[ERROR] Data recv error: " << ex.what() << std::endl; 
 		return false;
 	}
+
+	return true;
 }
 
 } // namespace SSGEClient
