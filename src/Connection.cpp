@@ -45,12 +45,8 @@ bool Connection::sendMessage() {
 
 	lastrun = now;
 
-    std::cout << "Sending message to server...." << std::endl;
-	
 	try { 
 		std::string message("j\n");
-
-		std::cout << "Sending the message \"" << message << "\" to the server!" << std::endl;
 		socket.sendBytes(message.data(), message.size());
 	}
 	catch (Poco::Exception& ex) {
@@ -64,7 +60,6 @@ bool Connection::sendMessage() {
 		socket.receiveBytes((void*) buffer, sizeof buffer);
 
 		std::string payload(buffer);
-		std::cout << payload << std::endl;
 
 		size_t pos = 0;
 		std::string token;
@@ -83,8 +78,6 @@ bool Connection::sendMessage() {
 				payload.erase(0, pos + delimSize);
 				continue;
 			}
-
-			std::cout << "ID [" << entity.id << "]" << std::endl;
 
 			auto itr = engine->entities.find(entity.id);
 			if (itr != engine->entities.end()) {
