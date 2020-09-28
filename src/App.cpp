@@ -2,7 +2,12 @@
 #include "Engine.h"
 #include "CollisionEntity.h"
 
+#include <map>
+#include <iostream>
+
 #include <RTShaderSystem/OgreRTShaderSystem.h>
+
+using std::map;
 
 using namespace Ogre;
 using namespace OgreBites;
@@ -75,31 +80,39 @@ void App::createScene()
 
 void App::frameRendered(const Ogre::FrameEvent& ev)
 {
-	conn->sendMessage();
-    engine->step();
+	// TODO: Catch exceptions here (and above), or they will terminate the program
+	try {
+		conn->sendMessage();
+		engine->step();
 
-	// Update the scene from the server's response
-	// TODO: Server should dictate entity type/model
-	int nEntites = engine->entities.size();
-	for (int i = 0; i < nEntites; i++) {
-		SSGEClient::CollisionEntity* cent = &(engine->entities.at(i));
-		SSGE::Vec3 centpos = cent->getPosition();
+		// Update the scene from the server's response
+		// TODO: Server should dictate entity type/model
+		std::map<unsigned int, CollisionEntity>::iterator it = engine->entities.begin();
+		for (it; it != engine->entities.end(); ++it) {
+			SSGEClient::CollisionEntity* cent = &(it->second);
+			SSGE::Vec3 centpos = cent->getPosition();
 
-		if (cent->hasMesh) {
-			cent->ogreNode->setPosition(centpos.x, centpos.y, centpos.z);
+			if (cent->hasMesh) {
+				cent->ogreNode->setPosition(centpos.x, centpos.y, centpos.z);
+			}
+			else {
+				cent->ogreEntity = scnMgr->createEntity("ogrehead.mesh");
+				cent->ogreNode = scnMgr->getRootSceneNode()->createChildSceneNode();
+				cent->ogreNode->setPosition(centpos.x, centpos.y, centpos.z);
+				cent->ogreNode->setScale(0.1, 0.1, 0.1);
+				//cent->ogreNode->roll(Degree(-90));
+				cent->ogreNode->attachObject(cent->ogreEntity);
+				cent->hasMesh = true;
+			}
 		}
-		else {
-			cent->ogreEntity = scnMgr->createEntity("ogrehead.mesh");
-			cent->ogreNode = scnMgr->getRootSceneNode()->createChildSceneNode();
-			cent->ogreNode->setPosition(centpos.x, centpos.y, centpos.z);
-			cent->ogreNode->setScale(0.1, 0.1, 0.1);
-			//cent->ogreNode->roll(Degree(-90));
-			cent->ogreNode->attachObject(cent->ogreEntity);
-			cent->hasMesh = true;
-		}
+
+		OgreBites::InputListener::frameRendered(ev);
+
 	}
-
-	OgreBites::InputListener::frameRendered(ev);
+	catch (std::exception ex) {
+		std::cerr << "[ERROR] Frame Error: " << ex.what() << std::endl;
+		throw ex;
+	}
 }
 
 bool App::keyPressed(const KeyboardEvent& evt)
